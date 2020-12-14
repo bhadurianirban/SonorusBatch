@@ -8,7 +8,7 @@
     <dependencies>
         <dependency>
             <groupId>org.patronus</groupId>
-            <artifactId>FractalCoreClient</artifactId>
+            <artifactId>PatronusCoreClient</artifactId>
             <version>${project.version}</version>
         </dependency>
 

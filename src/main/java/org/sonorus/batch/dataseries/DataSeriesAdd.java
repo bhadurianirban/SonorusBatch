@@ -11,11 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.sonorus.core.dto.SonorusDTO;
 import org.sonorus.core.client.SonorusCoreClient;
-import org.patronus.fractal.core.client.FractalCoreClient;
-import org.patronus.fractal.core.dto.FractalDTO;
-import org.patronus.fractal.response.FractalResponseCode;
-import org.patronus.fractal.response.FractalResponseMessage;
-import org.patronus.fractal.termmeta.DataSeriesMeta;
+import org.patronus.core.client.PatronusCoreClient;
+import org.patronus.core.dto.FractalDTO;
+import org.patronus.response.FractalResponseCode;
+import org.patronus.response.FractalResponseMessage;
+import org.patronus.termmeta.DataSeriesMeta;
 
 /**
  *
@@ -33,9 +33,9 @@ public class DataSeriesAdd {
     
     
     private void createDataSeriesTermInstance() {
-        FractalCoreClient fractalCoreClient = new FractalCoreClient();
+        PatronusCoreClient fractalCoreClient = new PatronusCoreClient();
         FractalDTO fractalDTO = new FractalDTO();
-        fractalDTO.setAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
+        fractalDTO.setHedwigAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
         fractalDTO = fractalCoreClient.createDataSeriesTermInstance(fractalDTO);
         dataseriesTermInstance = fractalDTO.getFractalTermInstance();
     }
@@ -53,7 +53,7 @@ public class DataSeriesAdd {
         //convert wav to csv and upload to dataseries
         SonorusCoreClient dgrfscc = new SonorusCoreClient();
         SonorusDTO dGRFSpeechDTO = new SonorusDTO();
-        dGRFSpeechDTO.setAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
+        dGRFSpeechDTO.setHedwigAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
         dGRFSpeechDTO.setWavFilePath(wavFilePath);
         dGRFSpeechDTO.setSpeechDataSeriesTermInstance(dataseriesTermInstance);
         dGRFSpeechDTO = dgrfscc.convertWavToCsv(dGRFSpeechDTO);

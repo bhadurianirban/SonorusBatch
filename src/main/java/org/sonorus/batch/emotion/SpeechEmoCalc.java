@@ -10,18 +10,18 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.sonorus.core.client.SonorusCoreClient;
-import org.hedwig.cms.constants.CMSConstants;
+import org.hedwig.leviosa.constants.CMSConstants;
 
-import org.patronus.fractal.termmeta.DataSeriesMeta;
-import org.patronus.fractal.termmeta.MFDFAResultsMeta;
+import org.patronus.termmeta.DataSeriesMeta;
+import org.patronus.termmeta.MFDFAResultsMeta;
 import org.sonorus.batch.dataseries.CMSClientAuthCredentialValue;
 import org.sonorus.batch.dataseries.DataSeriesAdd;
-import org.patronus.fractal.core.client.FractalCoreClient;
-import org.patronus.fractal.core.dto.FractalDTO;
-import org.patronus.fractal.response.FractalResponseCode;
-import org.patronus.fractal.response.FractalResponseMessage;
+import org.patronus.core.client.PatronusCoreClient;
+import org.patronus.core.dto.FractalDTO;
+import org.patronus.response.FractalResponseCode;
+import org.patronus.response.FractalResponseMessage;
 import org.sonorus.core.dto.SonorusDTO;
-import org.sonorus.core.dto.SpeechEmoResultsMeta;
+import org.sonorus.core.dto.SonorusResultsMeta;
 
 /**
  *
@@ -60,7 +60,7 @@ public class SpeechEmoCalc {
         //code for DGRFSpeech
         SonorusDTO dGRFSpeechDTO = new SonorusDTO();
         FractalResponseMessage responseMessage = new FractalResponseMessage();
-        dGRFSpeechDTO.setAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
+        dGRFSpeechDTO.setHedwigAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
         String dataSeriesSlug = (String)dataSeriesTermInstance.get(CMSConstants.TERM_INSTANCE_SLUG);
         dGRFSpeechDTO.setDataSeriesSlug(dataSeriesSlug);
         SonorusCoreClient dgrfscc = new SonorusCoreClient();
@@ -71,7 +71,7 @@ public class SpeechEmoCalc {
         }
         speechEmoTermInstance = dGRFSpeechDTO.getSpeechEmoTermInstance();
         speechEmoMfdfaTermInstance = dGRFSpeechDTO.getMfdfaTermInstance();
-        //Logger.getLogger(SpeechEmoCalc.class.getName()).log(Level.INFO,(String)speechEmoTermInstance.get(SpeechEmoResultsMeta.EMOTION));
+        //Logger.getLogger(SpeechEmoCalc.class.getName()).log(Level.INFO,(String)speechEmoTermInstance.get(SonorusResultsMeta.EMOTION));
     }
 
     public Map<String, Object> getSpeechEmoTermInstance() {
@@ -85,7 +85,7 @@ public class SpeechEmoCalc {
         String dataSeriesOrigFileName = (String)dataSeriesTermInstance.get(DataSeriesMeta.DATA_SERIES_ORIGINAL_FILENAME);
         String dataSeriesSlug = (String)dataSeriesTermInstance.get(CMSConstants.TERM_INSTANCE_SLUG);
         String hurstExp = (String)speechEmoMfdfaTermInstance.get(MFDFAResultsMeta.HURST_EXPONENT);
-        String identifiedEmo = speechEmoTermInstance.get(SpeechEmoResultsMeta.EMOTION).toString();
+        String identifiedEmo = speechEmoTermInstance.get(SonorusResultsMeta.EMOTION).toString();
         emoResult = dataSeriesOrigFileName+","+dataSeriesSlug+","+hurstExp+","+identifiedEmo;
         Logger.getLogger(SpeechEmoCalc.class.getName()).log(Level.INFO,emoResult);
         
@@ -96,7 +96,7 @@ public class SpeechEmoCalc {
         
         //delete emo mfdfa instance
         SonorusDTO sonorusDTO = new SonorusDTO();
-        sonorusDTO.setAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
+        sonorusDTO.setHedwigAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
         sonorusDTO.setSpeechEmoTermInstance(speechEmoTermInstance);
         
         SonorusCoreClient dgrfscc = new SonorusCoreClient();
@@ -106,9 +106,9 @@ public class SpeechEmoCalc {
             Logger.getLogger(SpeechEmoCalc.class.getName()).log(Level.SEVERE, responseMessage.getResponseMessage(sonorusDTO.getResponseCode()));
         }
         //delete dataseries 
-        FractalCoreClient mts = new FractalCoreClient();
+        PatronusCoreClient mts = new PatronusCoreClient();
         FractalDTO fractalDTO = new FractalDTO();
-        fractalDTO.setAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
+        fractalDTO.setHedwigAuthCredentials(CMSClientAuthCredentialValue.AUTH_CREDENTIALS);
         String selectedTermInstanceSlug = (String) dataSeriesTermInstance.get(CMSConstants.TERM_INSTANCE_SLUG);
         fractalDTO.setDataSeriesSlug(selectedTermInstanceSlug);
         //delete dataseries metadata

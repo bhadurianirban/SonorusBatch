@@ -18,6 +18,8 @@ public class DGRFSpeechBatch {
         HedwigAuthCredentials authCredentials = new HedwigAuthCredentials();
         authCredentials.setProductId(4);
         authCredentials.setTenantId(1);
+        authCredentials.setHedwigServer("localhost");
+        authCredentials.setHedwigServerPort("8080");
         CMSClientAuthCredentialValue.AUTH_CREDENTIALS= authCredentials;
         
         CliArgs cliArgs = new CliArgs(args);
